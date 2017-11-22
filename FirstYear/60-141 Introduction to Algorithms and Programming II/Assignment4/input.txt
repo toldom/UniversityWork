@@ -1,0 +1,5 @@
+MathFoundations,03,62,190,01,W,2017
+Calculus,03,62,141,04,W,2017
+Programming,03,60,141,01,W,2017
+Politics,02,45,100,01,W,2017
+Cinema,01,39,110,01,W,2017
