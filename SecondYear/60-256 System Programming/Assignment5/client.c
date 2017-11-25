@@ -27,7 +27,7 @@ int main(int argc, char * argv[]) {
 
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(7777);
-    serverAddr.sin_addr.s_addr = inet_addr("192.168.1.73");
+    serverAddr.sin_addr.s_addr = inet_addr(argv[1]);
 
     memset(serverAddr.sin_zero, '\0', sizeof(serverAddr.sin_zero));
 
@@ -36,28 +36,23 @@ int main(int argc, char * argv[]) {
     addrSize = sizeof(serverAddr);
     connect(clientSocket, (struct sockaddr *) &serverAddr, addrSize);
 
+    /*recv(clientSocket, buffer, 1024, 0);
+    printf("%s", buffer);*/
+
     char command[1024];
-
-
-
-    while (1){
-
-        scanf("%s", command);
-
-
-
-
-        break;
-    }
-
-
-    recv(clientSocket, buffer, 1024, 0);
-
-    printf("Data received: %s", buffer);
+    char buffer2[2048];
 
     serverSocket = accept(clientSocket, (struct sockaddr *) &command, &addrSize);
 
-    send(clientSocket, "TESTING", 1024, 0);
+    while (1) {
+
+        scanf("%s", command);
+        send(clientSocket, command, sizeof(command), 0);
+
+       //recv(clientSocket, buffer2, sizeof(buffer2), 0);
+    }
+
+    exit(0);
 
     return 0;
 }

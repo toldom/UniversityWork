@@ -35,17 +35,49 @@ int main(int argc, char * argv[]) {
 
     bind(welcomeSocket, (const struct sockaddr *) &serverAddr, sizeof(serverAddr));
 
-    if (listen(welcomeSocket, 5) == 0) {
-        printf("Waiting for connection from client ... ... ...\n");
-    } else {
-        printf("Error\n");
+    while (1) {
+        if (listen(welcomeSocket, 5) == 0) {
+            printf("Waiting for connection from client ... ... ...\n");
+        } else {
+            printf("Error\n");
+        }
+
+        addressSize = sizeof(serverStorage);
+        clientSocket = accept(welcomeSocket, (struct sockaddr *) &serverStorage, &addressSize);
+
+        printf("\nConnection established!\n\n");
+
+        strcpy(buffer, "Hello world!\n");
+        send(clientSocket, buffer, 13, 0);
+
+        while (1) {
+
+            char buffer2[2048];
+
+            int fd = creat("temp.txt", S_IRUSR | S_IWUSR | S_IXUSR);
+            dup2(fd, 1);
+            //close(fd);
+
+            recv(clientSocket, buffer, sizeof(buffer), 0);
+            printf("\nReceived Command: %s\n", buffer);
+            if (fork() == 0) {
+                //printf("%s",buffer);
+                //strcat(buffer, " > temp.txt");
+                //printf("%s",buffer);
+                execlp(buffer, buffer, (char *) 0);
+                exit(0);
+
+            } else {
+                read(fd, buffer2, 2048);
+                printf("%s", buffer2);
+            }
+
+
+
+
+        }
+
     }
-
-    addressSize = sizeof(serverStorage);
-    clientSocket = accept(welcomeSocket, (struct sockaddr *) &serverStorage, &addressSize);
-
-    strcpy(buffer, "Hello world!\n");
-    send(clientSocket, buffer, 13, 0);
 
     return 0;
 }
