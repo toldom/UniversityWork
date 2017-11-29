@@ -48,6 +48,6 @@ for((i=0;i<$largestSize;i+=1));do
 	fi
 done
 
-echo People who passed 212: ${passes212[@]}
-echo People who passed 256: ${passes256[@]}
-echo People who passed both: ${passesBoth[@]}
+sizeOfBoth=${#passesBoth[@]}
+
+echo ${passesBoth[@]}
