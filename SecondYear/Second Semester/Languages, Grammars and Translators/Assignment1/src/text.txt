@@ -1,0 +1,60 @@
+import java.util.regex.*;
+import java.io.*;
+
+public class A1_104565281 {
+    public static void main(String[] args){
+        String line;
+        int expressions=0;
+        try{
+            BufferedReader bufferReader = new BufferedReader(new FileReader(args[0]));
+            line = bufferReader.readLine();
+
+            Pattern p = Pattern.compile("[\\w]|[^_]");
+            Matcher m = p.matcher(line);
+
+            while(line !=null){
+                if(m.find()) {
+                    expressions += 1;
+
+                }
+                line = bufferReader.readLine();
+            }
+            System.out.print(expressions);
+
+
+
+
+
+
+
+
+
+
+
+
+            if(args[0].charAt(2) == '1'){
+                Writer write = new FileWriter("A11_output.txt");
+                write.write("hello World");
+            }else if(args[0].charAt(2) == '2'){
+                Writer write = new FileWriter("A12_output.txt");
+            }else if(args[0].charAt(2) == '3'){
+                Writer write = new FileWriter("A13_output.txt");
+            }else if(args[0].charAt(2) == '4'){
+                Writer write = new FileWriter("A14_output.txt");
+            }else if(args[0].charAt(2) == '5'){
+                Writer write = new FileWriter("A15_output.txt");
+            }
+
+
+
+
+
+        }catch(FileNotFoundException error){
+            System.out.println("File not found");
+            return;
+        }catch(IOException error){
+        System.out.println("File not found");
+        return;
+        }
+    }
+}
