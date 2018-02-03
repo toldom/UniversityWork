@@ -48,15 +48,15 @@ public class A1_104623006 {
 
             //Creating and writing to the output file, based on the input file
             if (args[0].charAt(2) == '1') {
-                outputFile = new File("A11_output.txt");
+                outputFile = new File("A11-output.txt");
             } else if (args[0].charAt(2) == '2') {
-                outputFile = new File("A12_output.txt");
+                outputFile = new File("A12-output.txt");
             }else if (args[0].charAt(2) == '3') {
-                outputFile = new File("A13_output.txt");
+                outputFile = new File("A13-output.txt");
             }else if (args[0].charAt(2) == '4') {
-                outputFile = new File("A14_output.txt");
+                outputFile = new File("A14-output.txt");
             } else if (args[0].charAt(2) == '5') {
-                outputFile = new File("A15_output.txt");
+                outputFile = new File("A15-output.txt");
             } else {
                 System.out.println("Error creating output file");
                 return;
@@ -76,7 +76,7 @@ public class A1_104623006 {
 
     /*
     Objective: Take the input string and remove any substrings/characters that cause an undesired output
-    Input: Recieves the input string as an input parameter
+    Input: Receives the input string as an input parameter
     Output: Returns the input string after having been modified within the function
      */
     private static String RemoveThingsFromInput(String input) {
@@ -87,17 +87,17 @@ public class A1_104623006 {
 
         //Loop runs for the length of the whole input string, resets to the beginning of the string when a substring is removed
         for (int i = 0; i < input.length(); i++) {
-                if (input.charAt(i) == '"' && hold == -1) {
-                    hold = i;
-                } else if (input.charAt(i) == '"') {
-                    substring = input.substring(hold, i+1);
-                    input = input.replace(substring, "");
+            if (input.charAt(i) == '"' && hold == -1) {
+                hold = i;
+            } else if (input.charAt(i) == '"') {
+                substring = input.substring(hold, i+1);
+                input = input.replace(substring, "");
 
-                    //When a substring is removed, hold variable and loop incrementation is reset
-                    hold = -1;
-                    i=0;
-                }
+                //When a substring is removed, hold variable and loop incrementation is reset
+                hold = -1;
+                i=0;
             }
+        }
         return input;
     }
 }
