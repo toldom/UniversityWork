@@ -18,6 +18,8 @@ public class EndScript : MonoBehaviour {
 		audio = GetComponent<AudioSource>();
 		
 		SetTexts();
+		
+		//Checks weather or not the player won the game or not, performs appropriate actions
 		if (PlayerPrefs.GetInt("didWin", 0) == 1) {
 			audio.PlayOneShot(winSound);
 			loseText.enabled = false;
@@ -29,15 +31,24 @@ public class EndScript : MonoBehaviour {
 		}
 	}
 
+	/*
+	 * Objective: Sets the value of the text objects to be displaying the correct value
+	 */
 	private void SetTexts() {
 
 		timeText.text = "Elapsed Time: " + PlayerPrefs.GetFloat("LastTime", -1);
 	}
 
+	/*
+	 * Objective: Public function to be called by a button click, loads the main menu
+	 */
 	public void LoadMainMenu() {
 		SceneManager.LoadScene("_MainMenu");
 	}
 
+	/*
+	 * Objective: Public function to be called by a button click, loads the game scene
+	 */
 	public void LoadGame() {
 		SceneManager.LoadScene("_Scene_0");
 	}

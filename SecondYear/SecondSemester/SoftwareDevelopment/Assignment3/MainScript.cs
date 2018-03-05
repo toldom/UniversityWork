@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -30,8 +26,14 @@ public class MainScript : MonoBehaviour {
 	private AudioSource audio;
 
 	private void Awake() {
+		
+		//Setting difficulty from PlayerPrefs
 		difficulty = PlayerPrefs.GetInt("difficulty", 3);
+		
+		//Initializing varaibles
 		pairsFound = 0;
+		cardFlip1 = false;
+		cardFlip2 = false;
 		
 		//Switch case to set dificulty customizations
 		switch (difficulty) {
@@ -72,11 +74,7 @@ public class MainScript : MonoBehaviour {
 		RandomlySetCards(arraySize);
 	}
 
-
-	// Use this for initialization
 	void Start () {
-		cardFlip1 = false;
-		cardFlip2 = false;
 		
 		SetTexts();
 		DisplayCards();
@@ -84,30 +82,34 @@ public class MainScript : MonoBehaviour {
 	}
 
 	void Update() {
+		
+		//Checks to see if two cards have been clicked
 		if (cardFlip2) {
 			cardFlip2 = false;
             cardFlip1 = false;
 			FindFlippedCards();
-			
 		}
 		
 		SetTexts();
 
+		//Checks to see if the player has found all pairs
 		if (pairsFound == scoreThreshold) {
 			PlayerPrefs.SetInt("didWin", 1);
 			PlayerPrefs.SetFloat("LastTime", Convert.ToInt64(Math.Ceiling(Time.timeSinceLevelLoad)));
 			SceneManager.LoadScene("_EndScene");
 		}
 		
+		//Checks to see if score is zero, determining if player looses or not
 		if (score <= 0) {
-			
 			PlayerPrefs.SetInt("didWin", 0);
 			PlayerPrefs.SetFloat("LastTime", Convert.ToInt64(Math.Ceiling(Time.timeSinceLevelLoad)));
 			SceneManager.LoadScene("_EndScene");
 		}
-
 	}
 
+	/*
+	 * Objective: Function will set the corresponding text boxes in the UI layer of Unity to show the correct information
+	 */
 	void SetTexts() {
 		scoreText.text = "Score: " + score;
 		pairsText.text = "Pairs Found: " + pairsFound;
@@ -118,6 +120,7 @@ public class MainScript : MonoBehaviour {
 	 * Objective: Function will populate an array (size based on difficulty) with ONLY TWO of each card that is avaliable to that difficulty.
 	 * 			  Difficulty is set in PlayerPrefs (default 3, 'hardest'), array size 12, 16, 20 respectively for difficulty levels 1 - 3
 	 * 			  The number of cards used from our collection of card prefabs are arraySize/2
+	 * Input: 	  Recieves 'arraySize' as an input paramater, and defines the array within accordingly 
 	 */
 	void RandomlySetCards(int arraySize) {
 
@@ -150,13 +153,16 @@ public class MainScript : MonoBehaviour {
 		}
 	}
 
-	//Will display cards at their relative correct positions on screen
-	void DisplayCards() {
+	/*
+	 * Objective: Will instanciate the cards that were previously randomly placed in the 'randomlyPlacedCards' array
+	 * 			  to their appropriate positions on the game screen. 
+	 */
+	private void DisplayCards() {
 
 		int posX = xStart, posY = 6;
 		GameObject cardTemp;
 
-		for (int i = 0; i < randomlyPlacedCards.Length; i++) {
+		for (var i = 0; i < randomlyPlacedCards.Length; i++) {
 			cardTemp = randomlyPlacedCards[i];
 			cardTemp = Instantiate(cardTemp);
 			
@@ -202,10 +208,12 @@ public class MainScript : MonoBehaviour {
 		EvaluateFlippedCards();
 	}
 
+	/*
+	 * Objective: Compare the two cards that were flipped over and determine if they match or not
+	 */
 	private void EvaluateFlippedCards() {
 
 		if (flippedCard1.name == flippedCard2.name) {
-			print("The cards match!");
 			pairsFound++;
 
 			audio.clip = cardMatchSound;
@@ -224,6 +232,7 @@ public class MainScript : MonoBehaviour {
 				}
 			}	
 			
+			//Remove the matched cards from the list of cards and destroy the game objects
 			instanciatedCards.Remove(tempObj1);
 			instanciatedCards.Remove(tempObj2);
 			Destroy(flippedCard1);
@@ -232,11 +241,13 @@ public class MainScript : MonoBehaviour {
 			flippedCard1 = null;
 			flippedCard2 = null;
 			
+			//Show the mouse cursor again
 			Cursor.visible = true;
 			Cursor.lockState = CursorLockMode.None;
 
 		} else {
-			print("The cards DO NOT match");
+			
+			//Decrease score by 40
 			score -= 40;
 
 			audio.PlayOneShot(noMatchSound);
@@ -248,9 +259,12 @@ public class MainScript : MonoBehaviour {
 			flippedCard2 = null;
 			
 		}
-		
 	}
 
+	/*
+	 * Objective: Public function that is triggered by CardScript that sets the cardFlip booleans to true upon cards
+	 * 			  being clicked
+	 */
 	public void CardFlipTrigger() {
 
 		if (!cardFlip1) {
